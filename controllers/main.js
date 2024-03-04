@@ -50,11 +50,15 @@ function pintarTablero(container, buscaminas, numFilas, numColumnas) {
     }
 }
 
-function toggleBandera(buscaminas, $c) {
+function getCasilla(buscaminas, $c) {
     const fila = $c.getAttribute("data-coordenadas").split(",")[0]
     const columna = $c.getAttribute("data-coordenadas").split(",")[1]
 
-    const casilla = buscaminas.tablero[fila][columna]
+    return buscaminas.tablero[fila][columna]
+}
+
+function toggleBandera(buscaminas, $c) {
+    const casilla = getCasilla(buscaminas, $c)
 
     console.log(casilla)
 
@@ -72,10 +76,7 @@ function toggleBandera(buscaminas, $c) {
 }
 
 function abrirCasilla(buscaminas, $c) {
-    const fila = $c.getAttribute("data-coordenadas").split(",")[0]
-    const columna = $c.getAttribute("data-coordenadas").split(",")[1]
-
-    const casilla = buscaminas.tablero[fila][columna]
+    const casilla = getCasilla(buscaminas, $c)
 
     console.log(casilla)
 
@@ -88,7 +89,7 @@ function abrirCasilla(buscaminas, $c) {
     else if (!casilla.bombasAdyacentes && !casilla.tieneBandera) {
         $c.classList.add("casilla-abierta")
         casilla.estaAbierta = true
-        buscarAdyacentes(buscaminas, fila, columna)
+        buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
     }
     else if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
@@ -115,24 +116,21 @@ function buscarAdyacentes(buscaminas, origenFila, origenColumna) {
     }
 }
 
-function vaciarCasillaVacia(buscaminas, $casilla) {
-    const fila = $casilla.getAttribute("data-coordenadas").split(",")[0]
-    const columna = $casilla.getAttribute("data-coordenadas").split(",")[1]
-
-    const casilla = buscaminas.tablero[fila][columna]
+function vaciarCasillaVacia(buscaminas, $c) {
+    const casilla = getCasilla(buscaminas, $c)
 
     if (casilla.estaAbierta) return
 
     if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
-        $casilla.classList.add(`bombas${casilla.bombasAdyacentes}`)
-        $casilla.estaAbierta = true
+        $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
+        $c.estaAbierta = true
         return
     }
 
     if (!casilla.tieneBandera) {
-        $casilla.classList.add("casilla-abierta")
+        $c.classList.add("casilla-abierta")
         casilla.estaAbierta = true
     }
     
-    buscarAdyacentes(buscaminas, fila, columna)
+    buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
 }

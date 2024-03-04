@@ -1,14 +1,14 @@
 export class Casilla {
-    posicionX
-    posicionY
+    fila
+    columna
     tieneBomba
     bombasAdyacentes
     tieneBandera
     estaAbierta
 
-    constructor(posicionX, posicionY) {
-        this.posicionX = posicionX
-        this.posicionY = posicionY
+    constructor(fila, columna) {
+        this.fila = fila
+        this.columna = columna
         this.tieneBomba = 0
         this.bombasAdyacentes = 0
         this.tieneBandera = false
@@ -22,13 +22,13 @@ export class Casilla {
     contarBombas(tablero) {
         if (this.tieneBomba) return
 
-        for (let x = this.posicionX - 1; x <= this.posicionX + 1; x++) {
-            if (x < 0 || x >= tablero.length) continue
+        for (let fila = this.fila - 1; fila <= this.fila + 1; fila++) {
+            if (fila < 0 || fila >= tablero.length) continue
 
-            for (let y = this.posicionY - 1; y <= this.posicionY + 1; y++) {
-                if (y < 0 || y >= tablero[x].length) continue
+            for (let columna = this.columna - 1; columna <= this.columna + 1; columna++) {
+                if (columna < 0 || columna >= tablero[fila].length) continue
 
-                this.bombasAdyacentes += tablero[x][y].tieneBomba
+                this.bombasAdyacentes += tablero[fila][columna].tieneBomba
             }
         }
     }
