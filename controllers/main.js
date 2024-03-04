@@ -14,7 +14,6 @@ export function init() {
     const $casillas = $container.querySelectorAll(".casilla")
     $casillas.forEach($c => {
         $c.addEventListener("click", (e) => {
-            console.log("CASILLA ORIGEN: ", $c)
             abrirCasilla(buscaminas, $c)
         })
     })
@@ -56,7 +55,7 @@ function abrirCasilla(buscaminas, $c) {
     else if (!casilla.bombasAdyacentes) {
         $c.classList.add("casilla-abierta")
         casilla.estaAbierta = true
-        abrirAdyacentes(buscaminas, fila, columna)
+        buscarAdyacentes(buscaminas, fila, columna)
     }
     else {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
@@ -64,7 +63,7 @@ function abrirCasilla(buscaminas, $c) {
     }
 }
 
-function abrirAdyacentes(buscaminas, origenFila, origenColumna) {
+function buscarAdyacentes(buscaminas, origenFila, origenColumna) {
     if (origenFila != 0) {
         const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
         if (top) vaciarCasillaVacia(buscaminas, top)
@@ -99,5 +98,5 @@ function vaciarCasillaVacia(buscaminas, $casilla) {
 
     $casilla.classList.add("casilla-abierta")
     casilla.estaAbierta = true
-    abrirAdyacentes(buscaminas, fila, columna)
+    buscarAdyacentes(buscaminas, fila, columna)
 }
