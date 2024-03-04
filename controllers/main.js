@@ -1,5 +1,7 @@
 import { Tablero } from "../models/Tablero.js"
 
+let banderasColocadas = 0
+
 export function init() {
     const numFilas = 10
     const numColumnas = 8
@@ -17,6 +19,13 @@ export function init() {
             abrirCasilla(buscaminas, $c)
         })
     })
+
+    $casillas.forEach($c => {
+        $c.addEventListener("contextmenu", (e) => {
+            e.preventDefault()
+            toggleBandera(buscaminas, $c)
+        })
+    })
 }
 
 function pintarTablero(container, buscaminas, numFilas, numColumnas) {
@@ -30,7 +39,7 @@ function pintarTablero(container, buscaminas, numFilas, numColumnas) {
             $casillaGrid.classList.add("casilla")
 
             if (casilla.tieneBomba) {
-                // $casillaGrid.classList.add("bomba")
+                $casillaGrid.classList.add("bomba")
             } else {
                 // $casillaGrid.classList.add(`bombas${casilla.bombasAdyacentes}`)
             }
@@ -41,23 +50,47 @@ function pintarTablero(container, buscaminas, numFilas, numColumnas) {
     }
 }
 
+function toggleBandera(buscaminas, $c) {
+    const fila = $c.getAttribute("data-coordenadas").split(",")[0]
+    const columna = $c.getAttribute("data-coordenadas").split(",")[1]
+
+    const casilla = buscaminas.tablero[fila][columna]
+
+    console.log(casilla)
+
+    if (casilla.estaAbierta) return
+
+    if (!casilla.tieneBandera && banderasColocadas < buscaminas.numeroBombas) {
+        $c.classList.add("bandera")
+        casilla.toggleBandera()
+        banderasColocadas++
+    } else if (casilla.tieneBandera) {
+        $c.classList.remove("bandera")
+        casilla.toggleBandera()
+        banderasColocadas--
+    }
+}
+
 function abrirCasilla(buscaminas, $c) {
     const fila = $c.getAttribute("data-coordenadas").split(",")[0]
     const columna = $c.getAttribute("data-coordenadas").split(",")[1]
 
     const casilla = buscaminas.tablero[fila][columna]
 
+    console.log(casilla)
+
     if (casilla.estaAbierta) return
 
     if (casilla.tieneBomba) {
         $c.classList.add("bomba-activa")
+        casilla.estaAbierta = true
     }
-    else if (!casilla.bombasAdyacentes) {
+    else if (!casilla.bombasAdyacentes && !casilla.tieneBandera) {
         $c.classList.add("casilla-abierta")
         casilla.estaAbierta = true
         buscarAdyacentes(buscaminas, fila, columna)
     }
-    else {
+    else if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
         casilla.estaAbierta = true
     }
@@ -90,13 +123,16 @@ function vaciarCasillaVacia(buscaminas, $casilla) {
 
     if (casilla.estaAbierta) return
 
-    if (casilla.bombasAdyacentes) {
+    if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
         $casilla.classList.add(`bombas${casilla.bombasAdyacentes}`)
         $casilla.estaAbierta = true
         return
     }
 
-    $casilla.classList.add("casilla-abierta")
-    casilla.estaAbierta = true
+    if (!casilla.tieneBandera) {
+        $casilla.classList.add("casilla-abierta")
+        casilla.estaAbierta = true
+    }
+    
     buscarAdyacentes(buscaminas, fila, columna)
 }
