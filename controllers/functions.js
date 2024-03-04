@@ -83,7 +83,7 @@ function vaciarCasillas(buscaminas, $c) {
 
     if (casilla.bombasAdyacentes) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
-        $c.estaAbierta = true
+        casilla.estaAbierta = true
         return
     }
 
