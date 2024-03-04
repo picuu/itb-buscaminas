@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Document</title>
+
+        <meta name="color-scheme" content="dark light" />
+
+        <!-- --------------- CSS --------------- -->
+        <link rel="stylesheet" href="./style.css" />
+
+        <!-- --------------- JS --------------- -->
+        <script type="module" defer>
+            import { init } from "./controllers/main.js"
+            window.loadInit = init
+        </script>
+    </head>
+    <body onload="loadInit()">
+
+        <main>
+            <div id="container" class="container"></div>
+        </main>
+
+    </body>
+</html>

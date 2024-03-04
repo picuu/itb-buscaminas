@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100dvh;
+    font-family: system-ui, Helvetica, Arial, sans-serif;
+}
+
+main {
+    width: calc(100% - 4rem);
+    margin-inline: auto;
+    padding: 2rem 0;
+}
+
+.container {
+    width: fit-content;
+    margin-inline: auto;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
+.casilla {
+    width: 42px;
+    height: auto;
+    aspect-ratio: 1;
+    background: url(./img/sprite.webp) no-repeat;
+    background-position: -42px -42px;
+    background-size: 294px;
+    cursor: pointer;
+}
+
+.casilla-abierta {
+    background-position: 0 -42px;
+}
+
+.bandera {
+    background-position: -84px -42px;
+}
+
+.bomba-activa {
+    background-position: -168px -42px;
+}
+
+.bomba {
+    background-position: -126px -42px;
+}
+
+.bombas1 {
+    background-position: 0 0;
+}
+
+.bombas2 {
+    background-position: -42px 0;
+}
+
+.bombas3 {
+    background-position: -84px 0;
+}
+
+.bombas4 {
+    background-position: -126px 0;
+}
+
+.bombas5 {
+    background-position: -168px 0;
+}
+
+.bombas6 {
+    background-position: -210px 0;
+}

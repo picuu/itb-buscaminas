@@ -1,0 +1,35 @@
+@startuml Buscaminas
+
+class Tablero {
+  + numeroFilas: Int
+  + numeroColumnas: Int
+  + numeroBombas: Int
+  + filas: Array<CasillaGenerica>
+  + columnas: Array<CasillaGenerica>
+
+  + constructor(numeroFilas, numeroColumnas, numeroBombas)
+  + generarTablero()
+  + getCasilla(posicionX, posicionY)
+  + plantarBombas()
+}
+
+class Casilla {
+  + tablero: Tablero
+  + posicionX: Int
+  + posicionY: Int
+  + tieneBomba: Int
+  + bombasAdyacentes: Int
+  + tieneBandera: Boolean
+  + estaAbierta: Boolean
+
+  + constructor(posicionX, posicionY, tablero)
+  + contarBombas()
+  + toggleBandera()
+  + abrir()
+
+}
+
+Tablero *- Casilla
+Tablero -* Casilla
+
+@enduml
