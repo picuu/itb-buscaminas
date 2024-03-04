@@ -14,6 +14,7 @@ export function init() {
     const $casillas = $container.querySelectorAll(".casilla")
     $casillas.forEach($c => {
         $c.addEventListener("click", (e) => {
+            console.log("CASILLA ORIGEN: ", $c)
             abrirCasilla(buscaminas, $c)
         })
     })
@@ -42,13 +43,61 @@ function pintarTablero(container, buscaminas, numFilas, numColumnas) {
 }
 
 function abrirCasilla(buscaminas, $c) {
-    const x = $c.getAttribute("data-coordenadas").split(",")[0]
-    const y = $c.getAttribute("data-coordenadas").split(",")[1]
+    const fila = $c.getAttribute("data-coordenadas").split(",")[0]
+    const columna = $c.getAttribute("data-coordenadas").split(",")[1]
 
-    const casilla = buscaminas.tablero[x][y]
+    const casilla = buscaminas.tablero[fila][columna]
 
     if (casilla.estaAbierta) return
-    else if (casilla.tieneBomba) $c.classList.add("bomba-activa")
-    else if (!casilla.bombasAdyacentes) $c.classList.add("casilla-abierta")
-    else $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
+
+    if (casilla.tieneBomba) {
+        $c.classList.add("bomba-activa")
+    }
+    else if (!casilla.bombasAdyacentes) {
+        $c.classList.add("casilla-abierta")
+        casilla.estaAbierta = true
+        abrirAdyacentes(buscaminas, fila, columna)
+    }
+    else {
+        $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
+        casilla.estaAbierta = true
+    }
+}
+
+function abrirAdyacentes(buscaminas, origenFila, origenColumna) {
+    if (origenFila != 0) {
+        const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
+        if (top) vaciarCasillaVacia(buscaminas, top)
+    }
+    if (origenFila != buscaminas.tablero.length) {
+        const bottom = document.querySelector(`[data-coordenadas="${parseInt(origenFila)+1},${origenColumna}"]`)
+        if (bottom) vaciarCasillaVacia(buscaminas, bottom)
+    }
+    if (origenColumna != 0) {
+        const left = document.querySelector(`[data-coordenadas="${origenFila},${origenColumna-1}"]`)
+        if (left) vaciarCasillaVacia(buscaminas, left)
+    }
+    if (origenColumna != buscaminas.tablero[0].length) {
+        const right = document.querySelector(`[data-coordenadas="${origenFila},${parseInt(origenColumna)+1}"]`)
+        if (right) vaciarCasillaVacia(buscaminas, right)
+    }
+}
+
+function vaciarCasillaVacia(buscaminas, $casilla) {
+    const fila = $casilla.getAttribute("data-coordenadas").split(",")[0]
+    const columna = $casilla.getAttribute("data-coordenadas").split(",")[1]
+
+    const casilla = buscaminas.tablero[fila][columna]
+
+    if (casilla.estaAbierta) return
+
+    if (casilla.bombasAdyacentes) {
+        $casilla.classList.add(`bombas${casilla.bombasAdyacentes}`)
+        $casilla.estaAbierta = true
+        return
+    }
+
+    $casilla.classList.add("casilla-abierta")
+    casilla.estaAbierta = true
+    abrirAdyacentes(buscaminas, fila, columna)
 }
