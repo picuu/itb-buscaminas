@@ -17,10 +17,10 @@ export class Tablero {
     }
 
     generarTablero() {
-        for (let x = 0; x < this.numeroFilas; x++) {
-            this.tablero[x] = []
-            for (let y = 0; y < this.numeroColumnas; y++) {
-                this.tablero[x][y] = new Casilla(x, y, this.tablero)
+        for (let fila = 0; fila < this.numeroFilas; fila++) {
+            this.tablero[fila] = []
+            for (let columna = 0; columna < this.numeroColumnas; columna++) {
+                this.tablero[fila][columna] = new Casilla(fila, columna)
             }
         }
     }
@@ -28,10 +28,10 @@ export class Tablero {
     plantarBombas() {
         let bombasPlantadas = 0
         while (bombasPlantadas < this.numeroBombas) {
-            const x = Math.floor(Math.random() * this.numeroFilas)
-            const y = Math.floor(Math.random() * this.numeroFilas)
+            const fila = Math.floor(Math.random() * this.numeroFilas)
+            const columna = Math.floor(Math.random() * this.numeroColumnas)
 
-            const casilla = this.tablero[x][y]
+            const casilla = this.tablero[fila][columna]
 
             if (casilla.tieneBomba) continue
 
@@ -41,9 +41,9 @@ export class Tablero {
     }
 
     contarBombas() {
-        for (let x = 0; x < this.numeroFilas; x++) {
-            for (let y = 0; y < this.numeroColumnas; y++) {
-                this.tablero[x][y].contarBombas(this.tablero)
+        for (let fila = 0; fila < this.numeroFilas; fila++) {
+            for (let columna = 0; columna < this.numeroColumnas; columna++) {
+                this.tablero[fila][columna].contarBombas(this.tablero)
             }
         }
     }

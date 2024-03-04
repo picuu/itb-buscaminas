@@ -2,8 +2,8 @@ import { Tablero } from "../models/Tablero.js"
 
 export function init() {
     const numFilas = 10
-    const numColumnas = 10
-    const numBombas = 20
+    const numColumnas = 8
+    const numBombas = 10
 
     const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
     const $container = document.getElementById("container")
@@ -20,13 +20,13 @@ export function init() {
 }
 
 function pintarTablero(container, buscaminas, numFilas, numColumnas) {
-    container.style.gridTemplateColumns = `repeat(${numFilas}, 1fr)`
+    container.style.gridTemplateColumns = `repeat(${numColumnas}, 1fr)`
 
-    for (let x = 0; x < numFilas; x++) {
-        for (let y = 0; y < numColumnas; y++) {
-            const casilla = buscaminas.tablero[x][y]
+    for (let col = 0; col < numFilas; col++) {
+        for (let fil = 0; fil < numColumnas; fil++) {
+            const casilla = buscaminas.tablero[col][fil]
             const $casillaGrid = document.createElement("div")
-            $casillaGrid.setAttribute("data-coordenadas", `${casilla.posicionX},${casilla.posicionY}`)
+            $casillaGrid.setAttribute("data-coordenadas", `${col},${fil}`)
             $casillaGrid.classList.add("casilla")
 
             if (casilla.tieneBomba) {
