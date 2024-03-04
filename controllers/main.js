@@ -60,8 +60,6 @@ function getCasilla(buscaminas, $c) {
 function toggleBandera(buscaminas, $c) {
     const casilla = getCasilla(buscaminas, $c)
 
-    console.log(casilla)
-
     if (casilla.estaAbierta) return
 
     if (!casilla.tieneBandera && banderasColocadas < buscaminas.numeroBombas) {
@@ -78,59 +76,51 @@ function toggleBandera(buscaminas, $c) {
 function abrirCasilla(buscaminas, $c) {
     const casilla = getCasilla(buscaminas, $c)
 
-    console.log(casilla)
-
-    if (casilla.estaAbierta) return
+    if (casilla.estaAbierta || casilla.tieneBandera) return
 
     if (casilla.tieneBomba) {
         $c.classList.add("bomba-activa")
         casilla.estaAbierta = true
+        return
     }
-    else if (!casilla.bombasAdyacentes && !casilla.tieneBandera) {
-        $c.classList.add("casilla-abierta")
-        casilla.estaAbierta = true
-        buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
-    }
-    else if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
+
+    if (casilla.bombasAdyacentes) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
         casilla.estaAbierta = true
+        return
     }
+    
+    $c.classList.add("casilla-abierta")
+    casilla.estaAbierta = true
+    buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
 }
 
 function buscarAdyacentes(buscaminas, origenFila, origenColumna) {
-    if (origenFila != 0) {
-        const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
-        if (top) vaciarCasillaVacia(buscaminas, top)
-    }
-    if (origenFila != buscaminas.tablero.length) {
-        const bottom = document.querySelector(`[data-coordenadas="${parseInt(origenFila)+1},${origenColumna}"]`)
-        if (bottom) vaciarCasillaVacia(buscaminas, bottom)
-    }
-    if (origenColumna != 0) {
-        const left = document.querySelector(`[data-coordenadas="${origenFila},${origenColumna-1}"]`)
-        if (left) vaciarCasillaVacia(buscaminas, left)
-    }
-    if (origenColumna != buscaminas.tablero[0].length) {
-        const right = document.querySelector(`[data-coordenadas="${origenFila},${parseInt(origenColumna)+1}"]`)
-        if (right) vaciarCasillaVacia(buscaminas, right)
-    }
+    const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
+    if (top) vaciarCasillas(buscaminas, top)
+
+    const bottom = document.querySelector(`[data-coordenadas="${parseInt(origenFila)+1},${origenColumna}"]`)
+    if (bottom) vaciarCasillas(buscaminas, bottom)
+
+    const left = document.querySelector(`[data-coordenadas="${origenFila},${origenColumna-1}"]`)
+    if (left) vaciarCasillas(buscaminas, left)
+    
+    const right = document.querySelector(`[data-coordenadas="${origenFila},${parseInt(origenColumna)+1}"]`)
+    if (right) vaciarCasillas(buscaminas, right)
 }
 
-function vaciarCasillaVacia(buscaminas, $c) {
+function vaciarCasillas(buscaminas, $c) {
     const casilla = getCasilla(buscaminas, $c)
 
-    if (casilla.estaAbierta) return
+    if (casilla.estaAbierta || casilla.tieneBandera) return
 
-    if (casilla.bombasAdyacentes && !casilla.tieneBandera) {
+    if (casilla.bombasAdyacentes) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
         $c.estaAbierta = true
         return
     }
 
-    if (!casilla.tieneBandera) {
-        $c.classList.add("casilla-abierta")
-        casilla.estaAbierta = true
-    }
-    
+    $c.classList.add("casilla-abierta")
+    casilla.estaAbierta = true
     buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
 }
