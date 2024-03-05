@@ -1,5 +1,8 @@
 # Pr03 - BuscaMinas
 
+> [!WARNING]
+> Esta descripción y el diagrama de clases UML son incorrectos.
+
 ## Diagrama de clases
 
 ![Diagrama de clases](./img/diagrama-clases.png)
