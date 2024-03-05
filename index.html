@@ -14,11 +14,11 @@
 
         <!-- --------------- JS --------------- -->
         <script type="module" defer>
-            import { init } from "./controllers/main.js"
-            window.loadInit = init
+            import { startGame } from "./controllers/main.js"
+            window.startGame = startGame
         </script>
     </head>
-    <body onload="loadInit()">
+    <body onload="startGame()">
         <main>
             <section class="header">
                 <button id="playAgainButton"></button>
