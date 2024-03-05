@@ -4,12 +4,14 @@ export class Tablero {
     numeroFilas
     numeroColumnas
     numeroBombas
+    bombas
     tablero
 
     constructor(numeroFilas, numeroColumnas, numeroBombas) {
         this.numeroFilas = numeroFilas
         this.numeroColumnas = numeroColumnas
         this.numeroBombas = numeroBombas
+        this.bombas = []
         this.tablero = []
         this.generarTablero()
         this.plantarBombas()
@@ -37,14 +39,23 @@ export class Tablero {
 
             casilla.plantarBomba()
             bombasPlantadas++
+            this.bombas.push(casilla)
         }
     }
 
     contarBombas() {
-        for (let fila = 0; fila < this.numeroFilas; fila++) {
-            for (let columna = 0; columna < this.numeroColumnas; columna++) {
-                this.tablero[fila][columna].contarBombas(this.tablero)
+        this.bombas.forEach(bomba => {
+            for (let fila = bomba.fila - 1; fila <= bomba.fila + 1; fila++) {
+                if (fila < 0 || fila >= this.tablero.length) continue
+    
+                for (let columna = bomba.columna - 1; columna <= bomba.columna + 1; columna++) {
+                    if (columna < 0 || columna >= this.tablero[fila].length) continue
+    
+                    const casilla = this.tablero[fila][columna]
+
+                    if (!casilla.tieneBomba) casilla.bombasAdyacentes++
+                }
             }
-        }
+        })
     }
 }
