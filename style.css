@@ -6,13 +6,42 @@
 
 body {
     min-height: 100dvh;
+    padding-top: 4rem;
     font-family: system-ui, Helvetica, Arial, sans-serif;
 }
 
 main {
-    width: calc(100% - 4rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: fit-content;
     margin-inline: auto;
-    padding: 2rem 0;
+}
+
+.header, .container {
+    border: 12px ridge gray;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+button {
+    width: 42px;
+    height: auto;
+    aspect-ratio: 1;
+    background: url(./img/sprite.webp) no-repeat;
+    background-size: 294px;
+    background-position: -252px 0;
+    border: none;
+    border-radius: 0;
+}
+
+.game-over {
+    background-position: -252px -42px;
 }
 
 .container {
@@ -43,6 +72,10 @@ main {
 
 .bomba-activa {
     background-position: -168px -42px;
+}
+
+.bomba-incorrecta {
+    background-position: -210px -42px;
 }
 
 .bomba {

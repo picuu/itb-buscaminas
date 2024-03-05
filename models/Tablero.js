@@ -5,6 +5,7 @@ export class Tablero {
     numeroColumnas
     numeroBombas
     bombas
+    banderas
     tablero
 
     constructor(numeroFilas, numeroColumnas, numeroBombas) {
@@ -12,6 +13,7 @@ export class Tablero {
         this.numeroColumnas = numeroColumnas
         this.numeroBombas = numeroBombas
         this.bombas = []
+        this.banderas = []
         this.tablero = []
         this.generarTablero()
         this.plantarBombas()
