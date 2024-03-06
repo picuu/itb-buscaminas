@@ -29,19 +29,26 @@ main {
     width: 100%;
 }
 
-button {
+button, .casilla {
     width: 42px;
     height: auto;
     aspect-ratio: 1;
     background: url(./img/sprite.webp) no-repeat;
-    background-size: 294px;
-    background-position: -252px 0;
+    background-size: 378px;
+}
+
+button {
+    background-position: -294px -42px;
     border: none;
     border-radius: 0;
 }
 
 .game-over {
     background-position: -252px -42px;
+}
+
+.game-win {
+    background-position: -336px -42px;
 }
 
 .container {
@@ -53,12 +60,7 @@ button {
 }
 
 .casilla {
-    width: 42px;
-    height: auto;
-    aspect-ratio: 1;
-    background: url(./img/sprite.webp) no-repeat;
     background-position: -42px -42px;
-    background-size: 294px;
     cursor: pointer;
 }
 
@@ -104,4 +106,12 @@ button {
 
 .bombas6 {
     background-position: -210px 0;
+}
+
+.bombas7 {
+    background-position: -252px 0;
+}
+
+.bombas8 {
+    background-position: -294px 0;
 }
