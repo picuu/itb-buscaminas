@@ -1,9 +1,9 @@
 import { Tablero } from "../models/Tablero.js"
 
 export function startGame() {
-    const numFilas = 6
-    const numColumnas = 6
-    const numBombas = 4
+    const numFilas = 9
+    const numColumnas = 9
+    const numBombas = 10
 
     const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
     const $container = document.getElementById("container")

@@ -27,6 +27,7 @@ main {
     display: flex;
     justify-content: center;
     width: 100%;
+    background-color: rgb(87, 87, 87);
 }
 
 button, .casilla {
