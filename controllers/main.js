@@ -1,11 +1,9 @@
 import { Tablero } from "../models/Tablero.js"
 
-let banderasColocadas = 0
-
 export function startGame() {
-    const numFilas = 10
-    const numColumnas = 8
-    const numBombas = 10
+    const numFilas = 6
+    const numColumnas = 6
+    const numBombas = 4
 
     const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
     const $container = document.getElementById("container")
@@ -14,6 +12,7 @@ export function startGame() {
 
     const $playAgainButton = document.getElementById("playAgainButton")
     $playAgainButton.classList.remove("game-over")
+    $playAgainButton.classList.remove("game-win")
 
     const $casillas = $container.querySelectorAll(".casilla")
 
@@ -60,19 +59,18 @@ function getCasilla(buscaminas, $c) {
 
 function toggleBandera(buscaminas, $c) {
     const casilla = getCasilla(buscaminas, $c)
+    const banderasColocadas = buscaminas.banderas.length
 
     if (casilla.estaAbierta) return
 
     if (!casilla.tieneBandera && banderasColocadas < buscaminas.numeroBombas) {
         $c.classList.add("bandera")
         casilla.toggleBandera()
-        banderasColocadas++
 
         buscaminas.banderas.push(casilla)
     } else if (casilla.tieneBandera) {
         $c.classList.remove("bandera")
         casilla.toggleBandera()
-        banderasColocadas--
 
         const banderaEliminadaIndex = buscaminas.banderas.findIndex(e => e == casilla)
         buscaminas.banderas.splice(banderaEliminadaIndex, 1)
@@ -94,11 +92,13 @@ function abrirCasilla(buscaminas, $c) {
     if (casilla.bombasAdyacentes) {
         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
         casilla.estaAbierta = true
+        verificarVictoria(buscaminas)
         return
     }
     
     $c.classList.add("casilla-abierta")
     casilla.estaAbierta = true
+    verificarVictoria(buscaminas)
     buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
 }
 
@@ -143,11 +143,52 @@ function gameOver(buscaminas, $c) {
         if (!bandera.tieneBomba) $bandera.classList.add("bomba-incorrecta")
     })
 
+    finalizarPartida("game-over")
+}
+
+function verificarVictoria(buscaminas) {
+    const casillasDescubiertas = buscaminas.tablero.every(fila => {
+        return fila.every(casilla => !casilla.tieneBomba ? casilla.estaAbierta : true)
+    })
+
+    if (casillasDescubiertas) {
+        finalizarPartida("game-win")
+        buscaminas.bombas.forEach(bomba => {
+            const $bomba = document.querySelector(`[data-coordenadas="${bomba.fila},${bomba.columna}"]`)
+            if (!bomba.tieneBandera) $bomba.classList.add("bandera")
+        })
+    }
+}
+
+function finalizarPartida(playAgainButtonClass) {
     const playAgainButton = document.getElementById("playAgainButton")
-    playAgainButton.classList.add("game-over")
+    playAgainButton.classList.add(playAgainButtonClass)
 
     playAgainButton.addEventListener("click", () => startGame())
 
     const containerTablero = document.getElementById("container")
     containerTablero.style.pointerEvents = "none"
+
+    if (playAgainButtonClass == "game-win") showConfetti()
+}
+
+function showConfetti() {
+    confetti({
+        angle: 130,
+        spread: 80,
+        origin: { x: .55, y: .5 },
+        ticks: 125,
+        scalar: .75,
+        zIndex: -1,
+        disableForReducedMotion: true
+    })
+    confetti({
+        angle: 50,
+        spread: 80,
+        origin: { x: .45, y: .5 },
+        ticks: 125,
+        scalar: .75,
+        zIndex: -1,
+        disableForReducedMotion: true
+    })
 }
