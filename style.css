@@ -30,12 +30,21 @@ main {
     background-color: rgb(87, 87, 87);
 }
 
+.container {
+    width: fit-content;
+    margin-inline: auto;
+    display: grid;
+    place-content: center;
+    text-align: center;
+}
+
 button, .casilla {
     width: 42px;
     height: auto;
     aspect-ratio: 1;
     background: url(./img/sprite.webp) no-repeat;
     background-size: 378px;
+    cursor: pointer;
 }
 
 button {
@@ -52,17 +61,8 @@ button {
     background-position: -336px -42px;
 }
 
-.container {
-    width: fit-content;
-    margin-inline: auto;
-    display: grid;
-    place-content: center;
-    text-align: center;
-}
-
 .casilla {
     background-position: -42px -42px;
-    cursor: pointer;
 }
 
 .casilla-abierta {
