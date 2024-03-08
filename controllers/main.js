@@ -9,183 +9,137 @@ export function startGame() {
     const $container = document.getElementById("container")
 
     $container.style.gridTemplateColumns = `repeat(${numColumnas}, 1fr)`
-    $container.style.pointerEvents = "all"
 
-    pintarTablero($container, buscaminas, numFilas, numColumnas)
+    pintarTablero($container, buscaminas)
 
-    const $playAgainButton = document.getElementById("playAgainButton")
-    $playAgainButton.classList.remove("game-over")
-    $playAgainButton.classList.remove("game-win")
-
-    $playAgainButton.addEventListener("click", () => startGame())
+    const playAgainButton = document.getElementById("playAgainButton")
+    playAgainButton.addEventListener("click", () => resetGame(buscaminas, $container, playAgainButton))
 }
 
-function pintarTablero(container, buscaminas, numFilas, numColumnas) {
+function pintarTablero(container, buscaminas) {
     container.replaceChildren()
+
+    const numFilas = buscaminas.numeroFilas
+    const numColumnas = buscaminas.numeroColumnas
 
     for (let fil = 0; fil < numFilas; fil++) {
         for (let col = 0; col < numColumnas; col++) {
             const casilla = buscaminas.tablero[fil][col]
 
-            const casillaDOM = document.createElement("div")
-            casillaDOM.setAttribute("data-coordenadas", `${fil},${col}`)
-            casillaDOM.classList.add("casilla")
+            const casillaDOM = crearCasilla(casilla)
+            container.appendChild(casillaDOM)
 
-            if (casilla.estaAbierta) {
-                if (casilla.bombasAdyacentes) casillaDOM.classList.add(`bombas${casilla.bombasAdyacentes}`)
-                else if (casilla.tieneBomba) casillaDOM.classList.add("bomba-activa")
-                else casillaDOM.classList.add("casilla-abierta")
-            }
+            eventosAbrir(casilla, casillaDOM, container, buscaminas)
 
-            if (casilla.tieneBandera) casillaDOM.classList.add("bandera")
-
-            casillaDOM.addEventListener("click", (e) => {
-                casilla.abrir(buscaminas)
-                pintarTablero(container, buscaminas, numFilas, numColumnas)
-            })
-
-            casillaDOM.addEventListener("contextmenu", (e) => {
-                e.preventDefault()
-                casilla.toggleBandera(buscaminas)
-                pintarTablero(container, buscaminas, numFilas, numColumnas)
-            })
+            eventosBandera(casilla, casillaDOM, container, buscaminas)
 
             // DESCOMENTAR PARA VER DONDE ESTÁN LAS BOMBAS :D
-            // if (casilla.tieneBomba) casillaDOM.classList.add("bomba")
-
-            container.appendChild(casillaDOM)
+            // if (casilla.tieneBomba) casillaDOM.classList.add("bomba")            
         }
     }
+    buscaminas.verificarVictoria()
+
+    if (buscaminas.gameOver) gameOver(buscaminas)
+    else if (buscaminas.gameWin) gameWin(buscaminas)
 }
 
-function getCasilla(buscaminas, $c) {
-    const fila = $c.getAttribute("data-coordenadas").split(",")[0]
-    const columna = $c.getAttribute("data-coordenadas").split(",")[1]
+function crearCasilla(casilla) {
+    const casillaDOM = document.createElement("div")
+    casillaDOM.setAttribute("data-coordenadas", `${casilla.fila},${casilla.columna}`)
+    casillaDOM.classList.add("casilla")
 
-    return buscaminas.tablero[fila][columna]
+    if (casilla.estaAbierta) {
+        if (casilla.bombasAdyacentes) casillaDOM.classList.add(`bombas${casilla.bombasAdyacentes}`)
+        else if (casilla.tieneBomba) casillaDOM.classList.add("bomba-activa")
+        else casillaDOM.classList.add("casilla-abierta")
+    }
+
+    if (casilla.tieneBandera) casillaDOM.classList.add("bandera")
+
+    return casillaDOM
+}
+
+function eventosAbrir(casilla, casillaDOM, container, buscaminas) {
+    casillaDOM.addEventListener("click", (e) => {
+        e.preventDefault()
+        casilla.abrir(buscaminas)
+        pintarTablero(container, buscaminas)
+    })
+}
+
+function eventosBandera(casilla, casillaDOM, container, buscaminas) {
+    casillaDOM.addEventListener("contextmenu", (e) => {
+        e.preventDefault()
+        casilla.toggleBandera(buscaminas)
+        pintarTablero(container, buscaminas)
+    })
 }
 
 function getCasillaDOM(casilla) {
     return document.querySelector(`[data-coordenadas="${casilla.fila},${casilla.columna}"]`)
 }
 
+function gameOver(buscaminas) {
+    buscaminas.bombas.forEach(bomba => {
+        const casillaDOM = getCasillaDOM(bomba)
+        if (!bomba.estaAbierta && !bomba.tieneBandera) casillaDOM.classList.add("bomba")
+    })
 
-// function toggleBandera(buscaminas, casilla) {
-//     const banderaColocada = casilla.toggleBandera(buscaminas)
-//     const casillaDOM = getCasillaDOM(casilla)
+    buscaminas.banderas.forEach(bandera => {
+        const casillaDOM = getCasillaDOM(bandera)
+        if (!bandera.tieneBomba) casillaDOM.classList.add("bomba-incorrecta")
+    })
 
-//     if (banderaColocada) {
-//         casillaDOM.classList.add("bandera")
-//     } else {
-//         casillaDOM.classList.remove("bandera")
-//     }
-// }
+    finalizarPartida("game-over")
+}
 
-// function abrirCasilla(buscaminas, casilla) {
-//     const casillaAbierta = casilla.abrir(buscaminas)
+function gameWin(buscaminas) {
+    buscaminas.bombas.forEach(bomba => {
+        const casillaDOM = getCasillaDOM(bomba)
+        casillaDOM.classList.add("bandera")
+    })
+    finalizarPartida("game-win")
+}
 
-//     if (!casillaAbierta) return
 
-//     if (casilla.tieneBomba) {
-//         casilla.classList.add("bomba-activa")
-//         return
-//     }
+function finalizarPartida(playAgainButtonClass) {
+    const playAgainButton = document.getElementById("playAgainButton")
+    playAgainButton.classList.add(playAgainButtonClass)
 
-//     if (casilla.bombasAdyacentes) {
-//         casilla.classList.add(`bombas${casilla.bombasAdyacentes}`)
-//         return
-//     }
-    
-//     casilla.classList.add("casilla-abierta")
-// }
+    const containerTablero = document.getElementById("container")
+    containerTablero.style.pointerEvents = "none"
 
-// function buscarAdyacentes(buscaminas, origenFila, origenColumna) {
-//     const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
-//     if (top) vaciarCasillas(buscaminas, top)
+    if (playAgainButtonClass == "game-win") showConfetti()
+}
 
-//     const bottom = document.querySelector(`[data-coordenadas="${parseInt(origenFila)+1},${origenColumna}"]`)
-//     if (bottom) vaciarCasillas(buscaminas, bottom)
+function resetGame(buscaminas, $container, playAgainButton) {
+    buscaminas.reset()
 
-//     const left = document.querySelector(`[data-coordenadas="${origenFila},${origenColumna-1}"]`)
-//     if (left) vaciarCasillas(buscaminas, left)
-    
-//     const right = document.querySelector(`[data-coordenadas="${origenFila},${parseInt(origenColumna)+1}"]`)
-//     if (right) vaciarCasillas(buscaminas, right)
-// }
+    playAgainButton.classList.remove("game-over")
+    playAgainButton.classList.remove("game-win")
 
-// function vaciarCasillas(buscaminas, $c) {
-//     const casilla = getCasilla(buscaminas, $c)
+    $container.style.pointerEvents = "all"
 
-//     if (casilla.estaAbierta || casilla.tieneBandera) return
+    pintarTablero($container, buscaminas)
+}
 
-//     if (casilla.bombasAdyacentes) {
-//         $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
-//         casilla.estaAbierta = true
-//         return
-//     }
-
-//     $c.classList.add("casilla-abierta")
-//     casilla.estaAbierta = true
-//     buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
-// }
-
-// function gameOver(buscaminas, $c) {
-//     buscaminas.bombas.forEach(bomba => {
-//         const $bomba = document.querySelector(`[data-coordenadas="${bomba.fila},${bomba.columna}"]`)
-//         if (!bomba.estaAbierta && !bomba.tieneBandera) $bomba.classList.add("bomba")
-//     })
-
-//     buscaminas.banderas.forEach(bandera => {
-//         const $bandera = document.querySelector(`[data-coordenadas="${bandera.fila},${bandera.columna}"]`)
-//         if (!bandera.tieneBomba) $bandera.classList.add("bomba-incorrecta")
-//     })
-
-//     finalizarPartida("game-over")
-// }
-
-// function verificarVictoria(buscaminas) {
-//     const casillasDescubiertas = buscaminas.tablero.every(fila => {
-//         return fila.every(casilla => !casilla.tieneBomba ? casilla.estaAbierta : true)
-//     })
-
-//     if (casillasDescubiertas) {
-//         finalizarPartida("game-win")
-//         buscaminas.bombas.forEach(bomba => {
-//             const $bomba = document.querySelector(`[data-coordenadas="${bomba.fila},${bomba.columna}"]`)
-//             if (!bomba.tieneBandera) $bomba.classList.add("bandera")
-//         })
-//     }
-// }
-
-// function finalizarPartida(playAgainButtonClass) {
-//     const playAgainButton = document.getElementById("playAgainButton")
-//     playAgainButton.classList.add(playAgainButtonClass)
-
-//     playAgainButton.addEventListener("click", () => startGame())
-
-//     const containerTablero = document.getElementById("container")
-//     containerTablero.style.pointerEvents = "none"
-
-//     if (playAgainButtonClass == "game-win") showConfetti()
-// }
-
-// function showConfetti() {
-//     confetti({
-//         angle: 130,
-//         spread: 80,
-//         origin: { x: .55, y: .5 },
-//         ticks: 125,
-//         scalar: .75,
-//         zIndex: -1,
-//         disableForReducedMotion: true
-//     })
-//     confetti({
-//         angle: 50,
-//         spread: 80,
-//         origin: { x: .45, y: .5 },
-//         ticks: 125,
-//         scalar: .75,
-//         zIndex: -1,
-//         disableForReducedMotion: true
-//     })
-// }
+function showConfetti() {
+    confetti({
+        angle: 130,
+        spread: 80,
+        origin: { x: .55, y: .5 },
+        ticks: 125,
+        scalar: .75,
+        zIndex: -1,
+        disableForReducedMotion: true
+    })
+    confetti({
+        angle: 50,
+        spread: 80,
+        origin: { x: .45, y: .5 },
+        ticks: 125,
+        scalar: .75,
+        zIndex: -1,
+        disableForReducedMotion: true
+    })
+}

@@ -6,6 +6,8 @@ export class Tablero {
     numeroBombas
     bombas
     banderas
+    gameOver
+    gameWin
     tablero
 
     constructor(numeroFilas, numeroColumnas, numeroBombas) {
@@ -14,6 +16,8 @@ export class Tablero {
         this.numeroBombas = numeroBombas
         this.bombas = []
         this.banderas = []
+        this.gameOver = false
+        this.gameWin = false
         this.tablero = []
         this.generarTablero()
         this.plantarBombas()
@@ -43,6 +47,7 @@ export class Tablero {
             bombasPlantadas++
             this.bombas.push(casilla)
         }
+        console.log(this.bombas)
     }
 
     contarBombas() {
@@ -59,5 +64,24 @@ export class Tablero {
                 }
             }
         })
+    }
+
+    verificarVictoria() {
+        const casillasDescubiertas = this.tablero.every(fila => {
+            return fila.every(casilla => !casilla.tieneBomba ? casilla.estaAbierta : true)
+        })
+
+        if (casillasDescubiertas) this.gameWin = true
+    }
+
+    reset() {
+        this.bombas = []
+        this.banderas = []
+        this.gameOver = false
+        this.gameWin = false
+        this.tablero = []
+        this.generarTablero()
+        this.plantarBombas()
+        this.contarBombas()
     }
 }

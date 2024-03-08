@@ -26,12 +26,11 @@ export class Casilla {
     
         if (!this.tieneBandera && banderasColocadas < buscaminas.numeroBombas) {
             this.tieneBandera = true
-            console.log("bandera: true")
             buscaminas.banderas.push(this)
 
         } else if (this.tieneBandera) {
             this.tieneBandera = false
-            console.log("bandera: false")
+
             const banderaEliminadaIndex = buscaminas.banderas.findIndex(e => e == this)
             buscaminas.banderas.splice(banderaEliminadaIndex, 1)
         }
@@ -41,7 +40,11 @@ export class Casilla {
         if (this.estaAbierta || this.tieneBandera) return
         this.estaAbierta = true
 
-        if (!this.bombasAdyacentes || !this.tieneBandera) this.abrirAdyacentes(buscaminas)
+        if (this.tieneBomba) {
+            buscaminas.gameOver = true
+            return
+        }
+        if (!this.bombasAdyacentes) this.abrirAdyacentes(buscaminas)
     }
 
     abrirAdyacentes(buscaminas) {
