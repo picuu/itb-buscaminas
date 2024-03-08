@@ -8,168 +8,119 @@ export function startGame() {
     const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
     const $container = document.getElementById("container")
 
-    pintarTablero($container, buscaminas, numFilas, numColumnas)
+    $container.style.gridTemplateColumns = `repeat(${numColumnas}, 1fr)`
 
-    const $playAgainButton = document.getElementById("playAgainButton")
-    $playAgainButton.classList.remove("game-over")
-    $playAgainButton.classList.remove("game-win")
+    pintarTablero($container, buscaminas)
 
-    const $casillas = $container.querySelectorAll(".casilla")
-
-    $casillas.forEach($c => {
-        $c.addEventListener("click", (e) => {
-            abrirCasilla(buscaminas, $c)
-        })
-    })
-
-    $casillas.forEach($c => {
-        $c.addEventListener("contextmenu", (e) => {
-            e.preventDefault()
-            toggleBandera(buscaminas, $c)
-        })
-    })
+    const playAgainButton = document.getElementById("playAgainButton")
+    playAgainButton.addEventListener("click", () => resetGame(buscaminas, $container, playAgainButton))
 }
 
-function pintarTablero(container, buscaminas, numFilas, numColumnas) {
+function pintarTablero(container, buscaminas) {
     container.replaceChildren()
-    container.style.pointerEvents = "all"
 
-    container.style.gridTemplateColumns = `repeat(${numColumnas}, 1fr)`
+    const numFilas = buscaminas.numeroFilas
+    const numColumnas = buscaminas.numeroColumnas
 
-    for (let col = 0; col < numFilas; col++) {
-        for (let fil = 0; fil < numColumnas; fil++) {
-            const casilla = buscaminas.tablero[col][fil]
-            const $casillaGrid = document.createElement("div")
-            $casillaGrid.setAttribute("data-coordenadas", `${col},${fil}`)
-            $casillaGrid.classList.add("casilla")
+    for (let fil = 0; fil < numFilas; fil++) {
+        for (let col = 0; col < numColumnas; col++) {
+            const casilla = buscaminas.tablero[fil][col]
 
-            // if (casilla.tieneBomba) $casillaGrid.classList.add("bomba")
+            const casillaDOM = crearCasilla(casilla)
+            container.appendChild(casillaDOM)
 
-            container.appendChild($casillaGrid)
+            eventosAbrir(casilla, casillaDOM, container, buscaminas)
+
+            eventosBandera(casilla, casillaDOM, container, buscaminas)
+
+            // DESCOMENTAR PARA VER DONDE ESTÁN LAS BOMBAS :D
+            // if (casilla.tieneBomba) casillaDOM.classList.add("bomba")            
         }
     }
+    buscaminas.verificarVictoria()
+
+    if (buscaminas.gameOver) gameOver(buscaminas)
+    else if (buscaminas.gameWin) gameWin(buscaminas)
 }
 
-function getCasilla(buscaminas, $c) {
-    const fila = $c.getAttribute("data-coordenadas").split(",")[0]
-    const columna = $c.getAttribute("data-coordenadas").split(",")[1]
+function crearCasilla(casilla) {
+    const casillaDOM = document.createElement("div")
+    casillaDOM.setAttribute("data-coordenadas", `${casilla.fila},${casilla.columna}`)
+    casillaDOM.classList.add("casilla")
 
-    return buscaminas.tablero[fila][columna]
-}
-
-function toggleBandera(buscaminas, $c) {
-    const casilla = getCasilla(buscaminas, $c)
-    const banderasColocadas = buscaminas.banderas.length
-
-    if (casilla.estaAbierta) return
-
-    if (!casilla.tieneBandera && banderasColocadas < buscaminas.numeroBombas) {
-        $c.classList.add("bandera")
-        casilla.toggleBandera()
-
-        buscaminas.banderas.push(casilla)
-    } else if (casilla.tieneBandera) {
-        $c.classList.remove("bandera")
-        casilla.toggleBandera()
-
-        const banderaEliminadaIndex = buscaminas.banderas.findIndex(e => e == casilla)
-        buscaminas.banderas.splice(banderaEliminadaIndex, 1)
-    }
-}
-
-function abrirCasilla(buscaminas, $c) {
-    const casilla = getCasilla(buscaminas, $c)
-
-    if (casilla.estaAbierta || casilla.tieneBandera) return
-
-    if (casilla.tieneBomba) {
-        $c.classList.add("bomba-activa")
-        casilla.estaAbierta = true
-        gameOver(buscaminas, $c)
-        return
+    if (casilla.estaAbierta) {
+        if (casilla.bombasAdyacentes) casillaDOM.classList.add(`bombas${casilla.bombasAdyacentes}`)
+        else if (casilla.tieneBomba) casillaDOM.classList.add("bomba-activa")
+        else casillaDOM.classList.add("casilla-abierta")
     }
 
-    if (casilla.bombasAdyacentes) {
-        $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
-        casilla.estaAbierta = true
-        verificarVictoria(buscaminas)
-        return
-    }
-    
-    $c.classList.add("casilla-abierta")
-    casilla.estaAbierta = true
-    verificarVictoria(buscaminas)
-    buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
+    if (casilla.tieneBandera) casillaDOM.classList.add("bandera")
+
+    return casillaDOM
 }
 
-function buscarAdyacentes(buscaminas, origenFila, origenColumna) {
-    const top = document.querySelector(`[data-coordenadas="${origenFila-1},${origenColumna}"]`)
-    if (top) vaciarCasillas(buscaminas, top)
-
-    const bottom = document.querySelector(`[data-coordenadas="${parseInt(origenFila)+1},${origenColumna}"]`)
-    if (bottom) vaciarCasillas(buscaminas, bottom)
-
-    const left = document.querySelector(`[data-coordenadas="${origenFila},${origenColumna-1}"]`)
-    if (left) vaciarCasillas(buscaminas, left)
-    
-    const right = document.querySelector(`[data-coordenadas="${origenFila},${parseInt(origenColumna)+1}"]`)
-    if (right) vaciarCasillas(buscaminas, right)
+function eventosAbrir(casilla, casillaDOM, container, buscaminas) {
+    casillaDOM.addEventListener("click", (e) => {
+        e.preventDefault()
+        casilla.abrir(buscaminas)
+        pintarTablero(container, buscaminas)
+    })
 }
 
-function vaciarCasillas(buscaminas, $c) {
-    const casilla = getCasilla(buscaminas, $c)
-
-    if (casilla.estaAbierta || casilla.tieneBandera) return
-
-    if (casilla.bombasAdyacentes) {
-        $c.classList.add(`bombas${casilla.bombasAdyacentes}`)
-        casilla.estaAbierta = true
-        return
-    }
-
-    $c.classList.add("casilla-abierta")
-    casilla.estaAbierta = true
-    buscarAdyacentes(buscaminas, casilla.fila, casilla.columna)
+function eventosBandera(casilla, casillaDOM, container, buscaminas) {
+    casillaDOM.addEventListener("contextmenu", (e) => {
+        e.preventDefault()
+        casilla.toggleBandera(buscaminas)
+        pintarTablero(container, buscaminas)
+    })
 }
 
-function gameOver(buscaminas, $c) {
+function getCasillaDOM(casilla) {
+    return document.querySelector(`[data-coordenadas="${casilla.fila},${casilla.columna}"]`)
+}
+
+function gameOver(buscaminas) {
     buscaminas.bombas.forEach(bomba => {
-        const $bomba = document.querySelector(`[data-coordenadas="${bomba.fila},${bomba.columna}"]`)
-        if (!bomba.estaAbierta && !bomba.tieneBandera) $bomba.classList.add("bomba")
+        const casillaDOM = getCasillaDOM(bomba)
+        if (!bomba.estaAbierta && !bomba.tieneBandera) casillaDOM.classList.add("bomba")
     })
 
     buscaminas.banderas.forEach(bandera => {
-        const $bandera = document.querySelector(`[data-coordenadas="${bandera.fila},${bandera.columna}"]`)
-        if (!bandera.tieneBomba) $bandera.classList.add("bomba-incorrecta")
+        const casillaDOM = getCasillaDOM(bandera)
+        if (!bandera.tieneBomba) casillaDOM.classList.add("bomba-incorrecta")
     })
 
     finalizarPartida("game-over")
 }
 
-function verificarVictoria(buscaminas) {
-    const casillasDescubiertas = buscaminas.tablero.every(fila => {
-        return fila.every(casilla => !casilla.tieneBomba ? casilla.estaAbierta : true)
+function gameWin(buscaminas) {
+    buscaminas.bombas.forEach(bomba => {
+        const casillaDOM = getCasillaDOM(bomba)
+        casillaDOM.classList.add("bandera")
     })
-
-    if (casillasDescubiertas) {
-        finalizarPartida("game-win")
-        buscaminas.bombas.forEach(bomba => {
-            const $bomba = document.querySelector(`[data-coordenadas="${bomba.fila},${bomba.columna}"]`)
-            if (!bomba.tieneBandera) $bomba.classList.add("bandera")
-        })
-    }
+    finalizarPartida("game-win")
 }
+
 
 function finalizarPartida(playAgainButtonClass) {
     const playAgainButton = document.getElementById("playAgainButton")
     playAgainButton.classList.add(playAgainButtonClass)
 
-    playAgainButton.addEventListener("click", () => startGame())
-
     const containerTablero = document.getElementById("container")
     containerTablero.style.pointerEvents = "none"
 
     if (playAgainButtonClass == "game-win") showConfetti()
+}
+
+function resetGame(buscaminas, $container, playAgainButton) {
+    buscaminas.reset()
+
+    playAgainButton.classList.remove("game-over")
+    playAgainButton.classList.remove("game-win")
+
+    $container.style.pointerEvents = "all"
+
+    pintarTablero($container, buscaminas)
 }
 
 function showConfetti() {
