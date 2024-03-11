@@ -1,3 +1,8 @@
+@font-face {
+    font-family: "04b_03";
+    src: url(./fonts/04B_03__.TTF);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -38,7 +43,7 @@ main {
     text-align: center;
 }
 
-button, .casilla {
+.boton-reset, .casilla {
     width: 42px;
     height: auto;
     aspect-ratio: 1;
@@ -47,7 +52,7 @@ button, .casilla {
     cursor: pointer;
 }
 
-button {
+.boton-reset {
     background-position: -294px -42px;
     border: none;
     border-radius: 0;
@@ -115,4 +120,22 @@ button {
 
 .bombas8 {
     background-position: -294px 0;
+}
+
+.seleccion-casillas {
+    display: flex;
+    gap: .75rem;
+    padding-bottom: 2rem;
+    margin-top: 1rem;
+
+    & button {
+        padding: .35rem .65rem;
+        border: none;
+        font-family: "04b_03";
+        font-size: 1.5rem;
+    }
+
+    & button:hover {
+        cursor: pointer;
+    }
 }

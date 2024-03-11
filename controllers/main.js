@@ -6,14 +6,16 @@ export function startGame() {
     const numBombas = 10
 
     const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
-    const $container = document.getElementById("container")
+    const container = document.getElementById("container")
 
-    $container.style.gridTemplateColumns = `repeat(${numColumnas}, 1fr)`
+    container.style.gridTemplateColumns = `repeat(${buscaminas.numeroColumnas}, 1fr)`
 
-    pintarTablero($container, buscaminas)
+    pintarTablero(container, buscaminas)
 
     const playAgainButton = document.getElementById("playAgainButton")
-    playAgainButton.addEventListener("click", () => resetGame(buscaminas, $container, playAgainButton))
+    playAgainButton.addEventListener("click", () => resetGame(buscaminas, container, playAgainButton))
+
+    eventosSeleccionCasillas(buscaminas, container, playAgainButton)
 }
 
 function pintarTablero(container, buscaminas) {
@@ -75,6 +77,23 @@ function eventosBandera(casilla, casillaDOM, container, buscaminas) {
     })
 }
 
+function eventosSeleccionCasillas(buscaminas, container, playAgainButton) {
+    const seleccionCasillasButtons = document.querySelectorAll(".seleccion-casillas button")
+    seleccionCasillasButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const filas = btn.getAttribute("data-filas")
+            const columnas = btn.getAttribute("data-columnas")
+            const bombas = btn.getAttribute("data-bombas")
+
+            buscaminas.numeroFilas = filas
+            buscaminas.numeroColumnas = columnas
+            buscaminas.numeroBombas = bombas
+
+            resetGame(buscaminas, container, playAgainButton)
+        })
+    })
+}
+
 function getCasillaDOM(casilla) {
     return document.querySelector(`[data-coordenadas="${casilla.fila},${casilla.columna}"]`)
 }
@@ -118,6 +137,7 @@ function resetGame(buscaminas, $container, playAgainButton) {
     playAgainButton.classList.remove("game-over")
     playAgainButton.classList.remove("game-win")
 
+    $container.style.gridTemplateColumns = `repeat(${buscaminas.numeroColumnas}, 1fr)`
     $container.style.pointerEvents = "all"
 
     pintarTablero($container, buscaminas)
