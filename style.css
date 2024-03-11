@@ -130,7 +130,7 @@ main {
 
     & button {
         padding: .35rem .65rem;
-        border: none;
+        border: 4px outset gray;
         font-family: "04b_03";
         font-size: 1.5rem;
     }
