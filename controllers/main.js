@@ -118,6 +118,7 @@ function gameWin(buscaminas) {
         casillaDOM.classList.add("bandera")
     })
     finalizarPartida("game-win")
+    showConfetti()
 }
 
 
@@ -127,20 +128,18 @@ function finalizarPartida(playAgainButtonClass) {
 
     const containerTablero = document.getElementById("container")
     containerTablero.style.pointerEvents = "none"
-
-    if (playAgainButtonClass == "game-win") showConfetti()
 }
 
-function resetGame(buscaminas, $container, playAgainButton) {
+function resetGame(buscaminas, container, playAgainButton) {
     buscaminas.reset()
 
     playAgainButton.classList.remove("game-over")
     playAgainButton.classList.remove("game-win")
 
-    $container.style.gridTemplateColumns = `repeat(${buscaminas.numeroColumnas}, 1fr)`
-    $container.style.pointerEvents = "all"
+    container.style.gridTemplateColumns = `repeat(${buscaminas.numeroColumnas}, 1fr)`
+    container.style.pointerEvents = "all"
 
-    pintarTablero($container, buscaminas)
+    pintarTablero(container, buscaminas)
 }
 
 function showConfetti() {
