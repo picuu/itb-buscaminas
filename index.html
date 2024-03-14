@@ -23,15 +23,17 @@
     <body onload="startGame()">
         <main>
             <section class="header">
+                <span class="banderas-restantes" id="contadorBanderas">010</span>
                 <button id="playAgainButton" class="boton-reset"></button>
+                <span class="tiempo" id="contadorTiempo">000</span>
             </section>
 
             <section id="container" class="container"></section>
 
             <section class="seleccion-casillas">
                 <button data-filas="9" data-columnas="9" data-bombas="10">9x9</button>
-                <button data-filas="16" data-columnas="16" data-bombas="40">16x16</button>
-                <button data-filas="30" data-columnas="16" data-bombas="99">30x16</button>
+                <button data-filas="16" data-columnas="16" data-bombas="35">16x16</button>
+                <button data-filas="16" data-columnas="30" data-bombas="80">16x30</button>
             </section>
         </main>
     </body>

@@ -16,6 +16,8 @@ export function startGame() {
     playAgainButton.addEventListener("click", () => resetGame(buscaminas, container, playAgainButton))
 
     eventosSeleccionCasillas(buscaminas, container, playAgainButton)
+
+    tiempo()
 }
 
 function pintarTablero(container, buscaminas) {
@@ -74,6 +76,7 @@ function eventosBandera(casilla, casillaDOM, container, buscaminas) {
         e.preventDefault()
         casilla.toggleBandera(buscaminas)
         pintarTablero(container, buscaminas)
+        actualizarContadorBombas(buscaminas)
     })
 }
 
@@ -121,7 +124,6 @@ function gameWin(buscaminas) {
     showConfetti()
 }
 
-
 function finalizarPartida(playAgainButtonClass) {
     const playAgainButton = document.getElementById("playAgainButton")
     playAgainButton.classList.add(playAgainButtonClass)
@@ -140,6 +142,7 @@ function resetGame(buscaminas, container, playAgainButton) {
     container.style.pointerEvents = "all"
 
     pintarTablero(container, buscaminas)
+    actualizarContadorBombas(buscaminas)
 }
 
 function showConfetti() {
@@ -161,4 +164,24 @@ function showConfetti() {
         zIndex: -1,
         disableForReducedMotion: true
     })
+}
+
+function tiempo() {
+    const contadorTiempo = document.getElementById("contadorTiempo")
+
+    setInterval(() => {
+        const tiempo = parseInt(contadorTiempo.textContent) + 1
+        let tiempoTxt = `${tiempo}`
+
+        if (tiempoTxt.length < 2) tiempoTxt = "00" + tiempo
+        else if (tiempoTxt.length < 3) tiempoTxt = "0" + tiempo
+
+        contadorTiempo.textContent = tiempoTxt
+    }, 1000)
+}
+
+function actualizarContadorBombas(buscaminas) {
+    const contadorBanderas = document.getElementById("contadorBanderas")
+    if (contadorBanderas.textContent.length >= 2) contadorBanderas.textContent = `0${buscaminas.numeroBombas - buscaminas.banderas.length}`
+    else contadorBanderas.textContent = `00${buscaminas.numeroBombas - buscaminas.banderas.length}`
 }

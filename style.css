@@ -30,17 +30,17 @@ main {
 
 .header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     background-color: rgb(87, 87, 87);
 }
 
-.container {
-    width: fit-content;
-    margin-inline: auto;
-    display: grid;
-    place-content: center;
-    text-align: center;
+.banderas-restantes, .tiempo {
+    padding-inline: 2px;
+    background-color: #212121;
+    font-size: 36px;
+    color: #f22;
 }
 
 .boton-reset, .casilla {
@@ -56,6 +56,14 @@ main {
     background-position: -294px -42px;
     border: none;
     border-radius: 0;
+}
+
+.container {
+    width: fit-content;
+    margin-inline: auto;
+    display: grid;
+    place-content: center;
+    text-align: center;
 }
 
 .game-over {
