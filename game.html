@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>Buscaminas - Carlos Capó</title>
+        <meta name="description" content="Juego del Buscaminas hecho con HTML, CSS y JavaScript, por Carlos Capó.">
+
+        <meta name="color-scheme" content="dark" />
+
+        <!-- --------------- CSS --------------- -->
+        <link rel="stylesheet" href="./style/main.css" />
+        <link rel="stylesheet" href="./style/tablero.css" />
+
+        <!-- --------------- JS --------------- -->
+        <script type="module" defer>
+            import { startGame } from "./controllers/main.js"
+            window.startGame = startGame
+        </script>
+
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
+    </head>
+    <body onload="startGame()">
+        <main>
+            <section class="header">
+                <span class="banderas-restantes" id="contadorBanderas">010</span>
+                <button id="playAgainButton" class="boton-reset"></button>
+                <span class="tiempo" id="contadorTiempo">000</span>
+            </section>
+
+            <section id="container" class="container"></section>
+
+            <section class="seleccion-casillas">
+                <button data-filas="9" data-columnas="9" data-bombas="10">9x9</button>
+                <button data-filas="16" data-columnas="16" data-bombas="35">16x16</button>
+                <button data-filas="16" data-columnas="30" data-bombas="80">16x30</button>
+            </section>
+        </main>
+    </body>
+</html>

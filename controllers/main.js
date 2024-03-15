@@ -38,7 +38,7 @@ function pintarTablero(container, buscaminas) {
             eventosBandera(casilla, casillaDOM, container, buscaminas)
 
             // DESCOMENTAR PARA VER DONDE ESTÁN LAS BOMBAS :D
-            // if (casilla.tieneBomba) casillaDOM.classList.add("bomba")            
+            // if (casilla.tieneBomba) casillaDOM.classList.add("bomba")
         }
     }
     buscaminas.verificarVictoria()

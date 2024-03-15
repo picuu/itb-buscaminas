@@ -1,40 +1,74 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Buscaminas - Carlos Capó</title>
-        <meta name="description" content="Juego del Buscaminas hecho con HTML, CSS y JavaScript, por Carlos Capó.">
+    <title>Registro resultados Buscaminas - Carlos Capó</title>
 
-        <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark">
+    
+    <!-- --------------- CSS --------------- -->
+    <link rel="stylesheet" href="./style/main.css" />
+    <link rel="stylesheet" href="./style/registro.css" />
+</head>
+<body>
 
-        <!-- --------------- CSS --------------- -->
-        <link rel="stylesheet" href="./style.css" />
+    <main>
+        <h1>Buscaminas</h1>
 
-        <!-- --------------- JS --------------- -->
-        <script type="module" defer>
-            import { startGame } from "./controllers/main.js"
-            window.startGame = startGame
-        </script>
+        <form action="/game.html">
+            <div>
+                <label>
+                    <span>Nombre</span>
+                    <input type="text" maxlength="20" id="form-nombre">
+                </label>
 
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
-    </head>
-    <body onload="startGame()">
-        <main>
-            <section class="header">
-                <span class="banderas-restantes" id="contadorBanderas">010</span>
-                <button id="playAgainButton" class="boton-reset"></button>
-                <span class="tiempo" id="contadorTiempo">000</span>
-            </section>
+                <label>
+                    <span>Apellido</span>
+                    <input type="text" maxlength="20" id="form-apellido">
+                </label>
+            </div>
 
-            <section id="container" class="container"></section>
+            <div>
+                <label class="required">
+                    <span>Fecha de nacimiento</span>
+                    <input type="date" id="form-fecha" required>
+                </label>
+    
+                <label class="required">
+                    <span>Nick</span>
+                    <input type="text" maxlength="15" id="form-nick" required>
+                </label>
+            </div>
 
-            <section class="seleccion-casillas">
-                <button data-filas="9" data-columnas="9" data-bombas="10">9x9</button>
-                <button data-filas="16" data-columnas="16" data-bombas="35">16x16</button>
-                <button data-filas="16" data-columnas="30" data-bombas="80">16x30</button>
-            </section>
-        </main>
-    </body>
+            <div>
+                <label class="required">
+                    <span>Correo electronico</span>
+                    <input type="email" pattern="^([a-zA-Z]|[0-9]|\.)+@itb.cat$" id="form-email" required>
+                </label>
+                
+                <label class="required">
+                    <span>Numero de filas</span>
+                    <input type="number" min="3" max="90" id="form-filas" required>
+                </label>
+            </div>
+
+            <div>
+                <label class="required">
+                    <span>Numero de columnas</span>
+                    <input type="number" min="3" max="90" id="form-columnas" required>
+                </label>
+    
+                <label class="required">
+                    <span>Numero de bombas</span>
+                    <input type="number" min="1" max="100" id="form-bombas" required>
+                </label>
+            </div>
+
+            <button type="submit" id="form-submit">Enviar</button>
+        </form>
+    </main>
+
+</body>
 </html>
