@@ -5,7 +5,7 @@
 
 ## Diagrama de clases
 
-![Diagrama de clases](./img/diagrama-clases.png)
+![Diagrama de clases](./src/uml/diagrama-clases.png)
 
 ## Descripción de las clases
 
@@ -93,4 +93,4 @@ abrir()
 
 El método abrir() abre la casilla e indica al usuario que ha perdido. El juego finalizaría aquí.
 
-<img src="./img/esquema.png" height="400" alt="Esquema boceto del buscaminas" />
+<img src="./src/uml/esquema.png" height="400" alt="Esquema boceto del buscaminas" />

@@ -1,4 +1,4 @@
-import { Tablero } from "../models/Tablero.js"
+import { Tablero } from "./models/Tablero.js"
 
 export function startGame() {
     const numFilas = 9
