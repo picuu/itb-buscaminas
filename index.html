@@ -11,59 +11,95 @@
     <!-- --------------- CSS --------------- -->
     <link rel="stylesheet" href="./style/main.css" />
     <link rel="stylesheet" href="./style/registro.css" />
+
+    <script type="module" defer>
+        import { checkForm } from "./js/form.js"
+        window.checkForm = checkForm
+    </script>
 </head>
-<body>
+<body onload="checkForm()">
 
     <main>
         <h1>Buscaminas</h1>
 
-        <form action="/game.html">
+        <form>
             <div>
                 <label>
                     <span>Nombre</span>
-                    <input type="text" maxlength="20" id="form-nombre">
+                    <input type="text" maxlength="20" name="nombre" id="form-nombre">
                 </label>
 
                 <label>
                     <span>Apellido</span>
-                    <input type="text" maxlength="20" id="form-apellido">
+                    <input type="text" maxlength="20" name="apellido" id="form-apellido">
                 </label>
             </div>
 
             <div>
-                <label class="required">
-                    <span>Fecha de nacimiento</span>
-                    <input type="date" id="form-fecha" required>
-                </label>
-    
-                <label class="required">
-                    <span>Nick</span>
-                    <input type="text" maxlength="15" id="form-nick" required>
-                </label>
-            </div>
+                <div>
+                    <label class="required">
+                        <span>Fecha de nacimiento</span>
+                        <input type="date" name="fechaNacimiento" id="form-fecha" >
+                    </label>
+                    <span class="form-error" id="fecha-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
 
-            <div>
-                <label class="required">
-                    <span>Correo electronico</span>
-                    <input type="email" pattern="^([a-zA-Z]|[0-9]|\.)+@itb.cat$" id="form-email" required>
-                </label>
+                <div>
+                    <label class="required">
+                        <span>Nick</span>
+                        <input type="text" maxlength="15" name="nick" id="form-nick" >
+                    </label>
+                    <span class="form-error" id="nick-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
                 
-                <label class="required">
-                    <span>Numero de filas</span>
-                    <input type="number" min="3" max="90" id="form-filas" required>
-                </label>
             </div>
 
             <div>
-                <label class="required">
-                    <span>Numero de columnas</span>
-                    <input type="number" min="3" max="90" id="form-columnas" required>
-                </label>
-    
-                <label class="required">
-                    <span>Numero de bombas</span>
-                    <input type="number" min="1" max="100" id="form-bombas" required>
-                </label>
+                <div>
+                    <label class="required">
+                        <span>Correo electronico</span>
+                        <input type="email" name="email" id="form-email">
+                    </label>
+                    <span class="form-error" id="email-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+                
+                <div>
+                    <label class="required">
+                        <span>Numero de filas</span>
+                        <input type="number" name="filas" id="form-filas" >
+                    </label>
+                    <span class="form-error" id="filas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <label class="required">
+                        <span>Numero de columnas</span>
+                        <input type="number" name="columnas" id="form-columnas" >
+                    </label>
+                    <span class="form-error" id="columnas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+
+                <div>
+                    <label class="required">
+                        <span>Numero de bombas</span>
+                        <input type="number" name="bombas" id="form-bombas" >
+                    </label>
+                    <span class="form-error" id="bombas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
             </div>
 
             <button type="submit" id="form-submit">Enviar</button>

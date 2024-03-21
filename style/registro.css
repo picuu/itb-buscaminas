@@ -21,9 +21,13 @@ form {
     padding-bottom: 1rem;
     margin-top: .5rem;
 
-    & div {
+    & > div {
         display: flex;
         gap: 2rem;
+    }
+
+    & > div > div {
+        max-width: min-content;
     }
 
     & label {
@@ -65,4 +69,14 @@ label.required span {
         font-size: .8rem;
         color: rgb(255 0 0 / .85);
     }
+}
+
+.form-error {
+    display: none;
+    font-size: .9rem;
+    color: rgb(255 80 80);
+}
+
+.invalid-input {
+    box-shadow: 0 0 0 1px red;
 }
