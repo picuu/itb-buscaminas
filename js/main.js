@@ -1,11 +1,10 @@
 import { Tablero } from "./models/Tablero.js"
+import { redirect } from "./form.js"
 
 export function startGame() {
-    const numFilas = 9
-    const numColumnas = 9
-    const numBombas = 10
+    const settings = getGameConfig()
 
-    const buscaminas = new Tablero(numFilas, numColumnas, numBombas)
+    const buscaminas = new Tablero(settings.rows, settings.cols, settings.bombs)
     const container = document.getElementById("container")
 
     container.style.gridTemplateColumns = `repeat(${buscaminas.numeroColumnas}, 1fr)`
@@ -16,8 +15,26 @@ export function startGame() {
     playAgainButton.addEventListener("click", () => resetGame(buscaminas, container, playAgainButton))
 
     eventosSeleccionCasillas(buscaminas, container, playAgainButton)
+    listenConfigButton()
 
     tiempo()
+}
+
+function getGameConfig() {
+    const settings = {
+        rows: 9,
+        cols: 9,
+        bombs: 10
+    }
+    
+    const userSettings = JSON.parse(localStorage.getItem("userSettings"))
+    if (userSettings) {
+        settings.rows = userSettings.filas
+        settings.cols = userSettings.columnas
+        settings.bombs = userSettings.bombas
+    }
+
+    return settings
 }
 
 function pintarTablero(container, buscaminas) {
@@ -77,6 +94,21 @@ function eventosBandera(casilla, casillaDOM, container, buscaminas) {
         casilla.toggleBandera(buscaminas)
         pintarTablero(container, buscaminas)
         actualizarContadorBombas(buscaminas)
+    })
+}
+
+function listenConfigButton() {
+    const configBtn = document.getElementById("config-button")
+    configBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        const userSettings = localStorage.getItem("userSettings")
+        let proced = true
+
+        if (userSettings) proced = confirm("Se borrará la configuración almacenada. Quieres continuar?")
+        if (proced) {
+            localStorage.removeItem("userSettings")
+            redirect("/")
+        }
     })
 }
 

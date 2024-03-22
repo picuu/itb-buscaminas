@@ -118,16 +118,16 @@ main {
     gap: .75rem;
     padding-bottom: 1rem;
     margin-top: .5rem;
+}
 
-    & button {
-        padding: .35rem .65rem;
-        border: 4px outset gray;
-        font-family: "04b_03";
-        font-size: 1.5rem;
-        color: #fff;
-    }
+.seleccion-casillas button, .config-button {
+    padding: .35rem .65rem;
+    border: 4px outset gray;
+    font-family: "04b_03";
+    font-size: 1.5rem;
+    color: #fff;
+}
 
-    & button:hover {
-        cursor: pointer;
-    }
+button:hover {
+    cursor: pointer;
 }

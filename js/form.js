@@ -2,7 +2,7 @@ const emailRegex = /^([a-zA-Z]|[0-9]|\.)+@itb.cat$/
 const emptyTextRegex = /^\s*$/
 
 export function init() {
-    if (localStorage.getItem("userSettings")) redirectToGame()
+    if (localStorage.getItem("userSettings")) redirect("/game.html")
     else {
         checkForm()
         listenGuestButton()
@@ -14,7 +14,7 @@ function listenGuestButton() {
     guestBtn.addEventListener("click", (e) => {
         e.preventDefault()
         localStorage.removeItem("userSettings")
-        redirectToGame()
+        redirect("/game.html")
     })
 }
 
@@ -42,7 +42,7 @@ function checkForm() {
 
         if (okBrithDate && okNick && okEmail && okRows && okCols && okBombs) {
             submitForm(data)
-            redirectToGame()
+            redirect("/game.html")
         }
     })
 }
@@ -131,7 +131,7 @@ function checkCols(input) {
 
 function checkBombs(rows, cols, bombs) {
     const maxBombs = Math.round((parseInt(rows.value) * parseInt(cols.value)) / 2)
-    if (bombs.value < 3) {
+    if (bombs.value < 1) {
         showInputError(bombs, "Almenos debe haber una bomba")
         return false
     }
@@ -152,9 +152,10 @@ function showInputError(input, message) {
 }
 
 function submitForm(data) {
-    localStorage.setItem("userSettings", data)
+    const jsonData = JSON.stringify(data)
+    localStorage.setItem("userSettings", jsonData)
 }
 
-function redirectToGame() {
-    window.location.assign("/game.html")
+export function redirect(url) {
+    window.location.assign(url)
 }
