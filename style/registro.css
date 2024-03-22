@@ -1,0 +1,87 @@
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(70ch, 100% - 4rem);
+    margin-inline: auto;
+    padding-top: 2rem;
+}
+
+h1 {
+    margin-bottom: 2rem;
+    font-family: "04b_03";
+    font-size: 4rem;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    margin-top: .5rem;
+
+    & > div {
+        display: flex;
+        gap: 2rem;
+    }
+
+    & > div > div {
+        max-width: min-content;
+    }
+
+    & label {
+        display: flex;
+        flex-direction: column;
+        gap: .25rem;
+        font-family: "04b_03";
+        font-size: 1.15rem;
+    }
+
+    & label input {
+        width: 250px;
+        padding: .35rem .5rem;
+        border: 4px outset gray;
+        background-color: rgb(87, 87, 87);
+    }
+
+    & button {
+        width: fit-content;
+        margin-top: 1rem;
+        padding: .35rem .65rem;
+        border: 4px outset gray;
+        font-family: "04b_03";
+        font-size: 1.5rem;
+        color: #fff;
+    }
+
+    & button:hover {
+        cursor: pointer;
+    }
+
+    & .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+label.required span {
+    display: flex;
+    gap: .25rem;
+
+    &:after {
+        content: "*";
+        font-size: .8rem;
+        color: rgb(255 0 0 / .85);
+    }
+}
+
+.form-error {
+    display: none;
+    font-size: .9rem;
+    color: rgb(255 80 80);
+}
+
+.invalid-input {
+    box-shadow: 0 0 0 1px red;
+}

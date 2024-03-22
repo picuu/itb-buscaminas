@@ -1,0 +1,16 @@
+@font-face {
+    font-family: "04b_03";
+    src: url(../src/fonts/04B_03__.TTF);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100dvh;
+    padding-top: 1.5rem;
+    font-family: system-ui, Helvetica, Arial, sans-serif;
+}

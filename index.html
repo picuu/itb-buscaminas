@@ -1,40 +1,115 @@
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <title>Buscaminas - Carlos Capó</title>
-        <meta name="description" content="Juego del Buscaminas hecho con HTML, CSS y JavaScript, por Carlos Capó.">
+    <title>Registro resultados Buscaminas - Carlos Capó</title>
 
-        <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark">
+    <link rel="shortcut icon" href="./src/img/faviconwebp.webp" type="image/webp">
+    
+    <!-- --------------- CSS --------------- -->
+    <link rel="stylesheet" href="./style/main.css" />
+    <link rel="stylesheet" href="./style/registro.css" />
 
-        <!-- --------------- CSS --------------- -->
-        <link rel="stylesheet" href="./style.css" />
+    <script type="module" defer>
+        import { init } from "./js/form.js"
+        window.init = init
+    </script>
+</head>
+<body onload="init()">
 
-        <!-- --------------- JS --------------- -->
-        <script type="module" defer>
-            import { startGame } from "./controllers/main.js"
-            window.startGame = startGame
-        </script>
+    <main>
+        <h1>Buscaminas</h1>
 
-        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js" defer></script>
-    </head>
-    <body onload="startGame()">
-        <main>
-            <section class="header">
-                <span class="banderas-restantes" id="contadorBanderas">010</span>
-                <button id="playAgainButton" class="boton-reset"></button>
-                <span class="tiempo" id="contadorTiempo">000</span>
-            </section>
+        <form>
+            <div>
+                <label>
+                    <span>Nombre</span>
+                    <input type="text" maxlength="20" name="nombre" id="form-nombre">
+                </label>
 
-            <section id="container" class="container"></section>
+                <label>
+                    <span>Apellido</span>
+                    <input type="text" maxlength="20" name="apellido" id="form-apellido">
+                </label>
+            </div>
 
-            <section class="seleccion-casillas">
-                <button data-filas="9" data-columnas="9" data-bombas="10">9x9</button>
-                <button data-filas="16" data-columnas="16" data-bombas="35">16x16</button>
-                <button data-filas="16" data-columnas="30" data-bombas="80">16x30</button>
-            </section>
-        </main>
-    </body>
+            <div>
+                <div>
+                    <label class="required">
+                        <span>Fecha de nacimiento</span>
+                        <input type="date" name="fechaNacimiento" id="form-fecha" >
+                    </label>
+                    <span class="form-error" id="fecha-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+
+                <div>
+                    <label class="required">
+                        <span>Nick</span>
+                        <input type="text" maxlength="15" name="nick" id="form-nick" >
+                    </label>
+                    <span class="form-error" id="nick-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+                
+            </div>
+
+            <div>
+                <div>
+                    <label class="required">
+                        <span>Correo electronico</span>
+                        <input type="email" name="email" id="form-email">
+                    </label>
+                    <span class="form-error" id="email-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+                
+                <div>
+                    <label class="required">
+                        <span>Numero de filas</span>
+                        <input type="number" name="filas" id="form-filas" >
+                    </label>
+                    <span class="form-error" id="filas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <label class="required">
+                        <span>Numero de columnas</span>
+                        <input type="number" name="columnas" id="form-columnas" >
+                    </label>
+                    <span class="form-error" id="columnas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+
+                <div>
+                    <label class="required">
+                        <span>Numero de bombas</span>
+                        <input type="number" name="bombas" id="form-bombas" >
+                    </label>
+                    <span class="form-error" id="bombas-error">
+                        Debes ser mayor de edad para poder jugar.
+                    </span>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" id="form-submit">Enviar</button>
+    
+                <button type="button" id="guest">Entrar como invitado</button>
+            </div>
+        </form>
+    </main>
+
+</body>
 </html>
