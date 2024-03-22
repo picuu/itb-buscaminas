@@ -58,6 +58,11 @@ form {
     & button:hover {
         cursor: pointer;
     }
+
+    & .buttons {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 label.required span {

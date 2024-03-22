@@ -3,7 +3,19 @@ const emptyTextRegex = /^\s*$/
 
 export function init() {
     if (localStorage.getItem("userSettings")) redirectToGame()
-    else checkForm()
+    else {
+        checkForm()
+        listenGuestButton()
+    }
+}
+
+function listenGuestButton() {
+    const guestBtn = document.getElementById("guest")
+    guestBtn.addEventListener("click", (e) => {
+        e.preventDefault()
+        localStorage.removeItem("userSettings")
+        redirectToGame()
+    })
 }
 
 function checkForm() {
@@ -145,5 +157,4 @@ function submitForm(data) {
 
 function redirectToGame() {
     window.location.assign("/game.html")
-    console.log("redirect")
 }
