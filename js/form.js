@@ -1,7 +1,12 @@
 const emailRegex = /^([a-zA-Z]|[0-9]|\.)+@itb.cat$/
 const emptyTextRegex = /^\s*$/
 
-export function checkForm() {
+export function init() {
+    if (localStorage.getItem("userSettings")) redirectToGame()
+    else checkForm()
+}
+
+function checkForm() {
     const form = document.querySelector("form")
     form.addEventListener('submit', (e) => {
         e.preventDefault()
@@ -23,7 +28,10 @@ export function checkForm() {
         const okCols = checkCols(columnas)
         const okBombs = checkBombs(filas, columnas, bombas)
 
-        if (okBrithDate && okNick && okEmail && okRows && okCols && okBombs) submitForm(data)
+        if (okBrithDate && okNick && okEmail && okRows && okCols && okBombs) {
+            submitForm(data)
+            redirectToGame()
+        }
     })
 }
 
@@ -132,5 +140,10 @@ function showInputError(input, message) {
 }
 
 function submitForm(data) {
-    console.log(data)
+    localStorage.setItem("userSettings", data)
+}
+
+function redirectToGame() {
+    window.location.assign("/game.html")
+    console.log("redirect")
 }
