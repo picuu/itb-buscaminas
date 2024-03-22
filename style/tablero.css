@@ -131,3 +131,13 @@ main {
 button:hover {
     cursor: pointer;
 }
+
+.user-info {
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: .85rem;
+}

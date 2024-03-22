@@ -16,6 +16,7 @@ export function startGame() {
 
     eventosSeleccionCasillas(buscaminas, container, playAgainButton)
     listenConfigButton()
+    showUserInfo()
 
     tiempo()
 }
@@ -35,6 +36,24 @@ function getGameConfig() {
     }
 
     return settings
+}
+
+function showUserInfo() {
+    let userSettings = localStorage.getItem("userSettings")
+    if (!userSettings) return
+
+    userSettings = JSON.parse(userSettings)
+    const infoContainer = document.getElementById("user-info")
+
+    const nick = document.createElement("p")
+    const email = document.createElement("p")
+
+    nick.textContent = userSettings.nick
+    email.textContent = userSettings.email
+
+    infoContainer.appendChild(nick)
+    infoContainer.appendChild(email)
+    infoContainer.style.display = "flex"
 }
 
 function pintarTablero(container, buscaminas) {
